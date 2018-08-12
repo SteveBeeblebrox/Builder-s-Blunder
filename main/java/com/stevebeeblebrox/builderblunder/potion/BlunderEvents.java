@@ -1,24 +1,19 @@
 package com.stevebeeblebrox.builderblunder.potion;
 
 import com.stevebeeblebrox.builderblunder.Main;
+import com.stevebeeblebrox.builderblunder.util.Reference;
 
+import net.minecraftforge.event.world.BlockEvent;
+import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 
+@Mod.EventBusSubscriber(modid = Reference.MOD_ID)
 public class BlunderEvents
 {
 	@SubscribeEvent
-	public static void onBlunder(TickEvent.PlayerTickEvent event)
-	{
-		boolean blunder = false;
-		if(event.player.isPotionActive(Main.BLUNDER_POTION))
-			blunder = true;
-		if(blunder || event.player.isCreative() || event.player.isSpectator()) {
-			event.player.capabilities.allowEdit = false;
+	public static void onplace(BlockEvent.PlaceEvent event)
+		{
+		if(event.getPlayer().isPotionActive(Main.BLUNDER_POTION) && !event.getPlayer().isCreative())
+			event.setCanceled(true);
 		}
-		else {
-			blunder = false;
-			event.player.capabilities.allowEdit = true;
-			}
 	}
-}
